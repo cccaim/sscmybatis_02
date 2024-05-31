@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.sscmybatis_02._01_mapper.NoticeMapper">
+
+    <select id="getNoticeList" resultType="com.myapp.sscmybatis_02._03_vo.NoticeVO">
+        SELECT
+            n.noticeNo,
+            n.content AS notice_content,
+            n.startDate AS notice_startDate,
+            n.endDate AS notice_endDate,
+            n.uploadDate AS notice_uploadDate,
+            n.title AS notice_title,
+            u.userNo AS user_userNo,
+            u.name AS user_name
+        FROM
+            notice n
+                LEFT JOIN
+            user u ON n.userNo = u.userNo;
+    </select>
+</mapper>

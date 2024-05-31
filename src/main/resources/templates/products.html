@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품목록 게시판</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <ul>
+            <li><a href="/products/1" class="active">상품목록</a></li>
+            <li><a href="/questions/1">문의목록</a></li>
+            <li><a href="/users/1">회원목록</a></li>
+            <li><a href="/notices/1">공지목록</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h1>상품목록</h1>
+            <div class="search">
+            <form action="/products/search" method="GET">
+                <input type="text" name="keyword" placeholder="검색어를 입력하세요">
+                <select name="category">
+                    <option th:each="c: ${category1List}"
+                            th:value="${c.getName()}"
+                            th:text="${c.getNameKo()}"></option>
+                </select>
+                <button type="submit">검색</button>
+            </form>
+            </div>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>사진</th>
+                <th>상품이름</th>
+                <th>상품가격</th>
+                <th>상품분류01</th>
+                <th>상품분류02</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${productList}">
+                <td>
+                    <div th:text="${product.productNo}"></div>
+                </td>
+                <td>
+                    <a th:href="@{'/products/update/' + ${product.productNo}}">
+                    <img th:src="@{'/images' + ${product.photoName} +'.jpg'}" width="100">
+                    </a>
+                </td>
+                <td>
+                    <div>
+                        <a th:href="@{/products/edit/{productNo}(productNo=${product.productNo})}">
+                            <span th:text="${product.productName}"></span>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div th:text="${product.price}"></div>
+                </td>
+                <td>
+                    <div th:text="${product.category1Name_ko}"></div>
+                </td>
+                <td>
+                    <div th:text="${product.category2Name_ko}"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination">
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

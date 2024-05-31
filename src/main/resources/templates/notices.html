@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 게시판</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <ul>
+            <ul>
+                <li><a href="/product/1">상품목록</a></li>
+                <li><a href="/questions/1">문의목록</a></li>
+                <li><a href="/users/1">회원목록</a></li>
+                <li><a href="/notices/1" class="active">공지목록</a></li>
+            </ul>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h1>공지목록</h1>
+            <div class="search">
+                <input type="text" placeholder="검색">
+                <select>
+                    <option>상품분류</option>
+                </select>
+            </div>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>공지사항</th>
+                <th>시작일자</th>
+                <th>종료일자</th>
+                <th>등록일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="notice : ${noticeList}">
+                <td>
+                    <div th:text="${notice.noticeNo}"></div>
+                </td>
+                <td class="notice">
+                    <div>
+                        <a th:href="@{'/notice/details/' + ${notice.noticeNo}}"
+                           th:text="${notice.title}"></a>
+                    </div>
+                </td>
+                <td>
+                    <div th:text="${notice.startDate}"></div>
+                </td>
+                <td>
+                    <div th:text="${notice.endDate}"></div>
+                </td>
+                <td>
+                    <div th:text="${notice.uploadDate}"></div>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        <div>
+            <td colspan="4">
+                <button href="#">새 공지 만들기</button>
+            </td>
+        </div>
+
+        <div class="pagination">
+            <a href="#">&lt;</a>
+            <a href="#">1</a>
+            <a href="#" class="active">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">&gt;</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
