@@ -42,16 +42,16 @@
                     <td>
                         <div th:text="${question.questionNo}"></div>
                     </td>
+                    <td>
+                        <div th:text="${question.productName}"></div>
+                    </td>
                     <td class="question-content" onclick="expandQuestion(this)">
                         <div th:text="${question.content}" class="expandable"></div>
                         <div class="answer-form" style="display: none;">
                             <!-- Answer form goes here -->
-                        <textarea placeholder="답변 내용"></textarea>
-                        <button onclick="submitAnswer(this)">등록</button>
-                    </div>
-                    </td>
-                    <td>
-                        <div th:text="${question.productName}"></div>
+                            <textarea placeholder="답변 내용"></textarea>
+                            <button onclick="submitAnswer(this)">등록</button>
+                        </div>
                     </td>
                     <td class="answer-toggle">미확인</td>
                 </tr>

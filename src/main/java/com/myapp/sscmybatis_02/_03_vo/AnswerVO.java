@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -12,8 +14,8 @@ import lombok.ToString;
 public class AnswerVO {
 
   private int answerNo;
-  private int questionNo; //-
+  private int questionNo;
   private String content;
-  private String uploadDate;
-  private String userNo; //-
+  private Date uploadDate;
+  private String userNo;
 }

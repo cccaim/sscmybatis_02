@@ -22,4 +22,11 @@ public class AnswerController {
     model.addAttribute("answerList", answerList);
     return "answer";
   }
+
+  @PostMapping
+  @ResponseBody
+  public String saveAnswer(@RequestBody AnswerDTO answerDTO) {
+    answerService.saveAnswer(answerDTO);
+    return "success";
+  }
 }

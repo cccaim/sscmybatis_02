@@ -7,6 +7,7 @@ import com.myapp.sscmybatis_02._03_vo.AnswerVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class AnswerService {
   private final AnswerMapper answerMapper;
 
+  //answer 리스트
   public List<AnswerDTO> getAllAnswers(int answerNo) {
     List<AnswerVO> voList = answerMapper.getAnswerList(answerNo);
 
@@ -32,4 +34,15 @@ public class AnswerService {
     }
     return dtoList;
   }
+
+  //answer 답변 입력
+  public void saveAnswer(AnswerDTO answerDTO) {
+    Answer answer = new Answer();
+    answer.setQuestionNo(answerDTO.getQuestionNo());
+    answer.setUserNo(answerDTO.getUserNo());
+    answer.setContent(answerDTO.getContent());
+    answer.setUploadDate(new Date());
+    answerMapper.insertAnswer(answer);
+  }
+
 }
