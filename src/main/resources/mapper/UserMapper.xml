@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.sscmybatis_02._01_mapper.UserMapper">
+
+    <select id="getUserList" resultType="com.myapp.sscmybatis_02._03_vo.UserVO">
+        SELECT
+            u.userNo,
+            u.name AS userName,
+            u.birth AS userBirth,
+            u.tel AS userTel,
+            u.gender AS userGender,
+            u.email AS userEmail,
+            u.id AS userId,
+            u.pw AS userPw,
+            u.refundAccount AS userRefundAccount,
+            g.userGradeNo AS userGradeUserGradeNo,
+            g.grade AS userGradeGrade
+        FROM
+            user u
+                LEFT JOIN
+            userGrade g ON u.userGradeNo = g.userGradeNo;
+    </select>
+</mapper>

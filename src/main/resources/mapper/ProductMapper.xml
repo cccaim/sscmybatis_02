@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.sscmybatis_02._01_mapper.ProductMapper">
+
+    <select id="getProductList" resultType="com.myapp.sscmybatis_02._03_vo.ProductVO">
+        SELECT
+            photo.photoNo AS photoNo,
+            photo.photoName AS photoName,
+            p.productNo AS productNo,
+            p.name AS productName,
+            p.price AS price,
+            c2.category2No AS category2No,
+            c2.name AS category2Name,
+            c2.name_ko AS category2Name_ko,
+            c1.category1No AS category1No,
+            c1.name AS category1Name,
+            c1.name_ko AS category1Name_ko
+        FROM
+            product p
+                LEFT JOIN productPhoto photo ON photo.productNo = p.productNo
+                LEFT JOIN category2 c2 ON p.category2No = c2.category2No
+                LEFT JOIN category1 c1 ON c2.category1No = c1.category1No;
+    </select>
+
+    <select id="searchProducts" resultType="com.myapp.sscmybatis_02._03_vo.ProductVO">
+        SELECT
+            photo.photoNo AS photoNo,
+            photo.photoName AS photoName,
+            p.productNo AS productNo,
+            p.name AS productName,
+            p.price AS price,
+            c2.category2No AS category2No,
+            c2.name AS category2Name,
+            c2.name_ko AS category2Name_ko,
+            c1.category1No AS category1No,
+            c1.name AS category1Name,
+            c1.name_ko AS category1Name_ko
+        FROM
+            product p
+                LEFT JOIN productPhoto photo ON photo.productNo = p.productNo
+                LEFT JOIN category2 c2 ON p.category2No = c2.category2No
+                LEFT JOIN category1 c1 ON c2.category1No = c1.category1No
+        WHERE
+            p.name LIKE CONCAT('%', #{keyword}, '%');
+    </select>
+
+    <select id="searchProductsByCategory" parameterType="map" resultType="com.myapp.sscmybatis_02._03_vo.ProductVO">
+        SELECT
+            photo.photoNo AS photoNo,
+            photo.photoName AS photoName,
+            p.productNo AS productNo,
+            p.name AS productName,
+            p.price AS price,
+            c2.category2No AS category2No,
+            c2.name AS category2Name,
+            c2.name_ko AS category2Name_ko,
+            c1.category1No AS category1No,
+            c1.name AS category1Name,
+            c1.name_ko AS category1Name_ko
+        FROM
+            product p
+                LEFT JOIN productPhoto photo ON photo.productNo = p.productNo
+                LEFT JOIN category2 c2 ON p.category2No = c2.category2No
+                LEFT JOIN category1 c1 ON c2.category1No = c1.category1No
+        WHERE
+            p.name LIKE CONCAT('%', #{keyword}, '%')
+          AND c1.name LIKE CONCAT('%', #{category}, '%');
+    </select>
+
+    <select id="getCategory1List" resultType="com.myapp.sscmybatis_02._03_vo.CategoryVO">
+        select name, name_ko
+        from category1
+    </select>
+
+    <select id="getProductById" parameterType="int" resultType="com.myapp.sscmybatis_02._03_vo.ProductVO">
+        SELECT
+            photo.photoNo AS photoNo,
+            photo.photoName AS photoName,
+            p.productNo AS productNo,
+            p.name AS productName,
+            p.price AS price,
+            c2.category2No AS category2No,
+            c2.name AS category2Name,
+            c2.name_ko AS category2Name_ko,
+            c1.category1No AS category1No,
+            c1.name AS category1Name,
+            c1.name_ko AS category1Name_ko
+
+        FROM
+            product p
+                LEFT JOIN productPhoto photo ON photo.productNo = p.productNo
+                LEFT JOIN category2 c2 ON p.category2No = c2.category2No
+                LEFT JOIN category1 c1 ON c2.category1No = c1.category1No
+        WHERE
+            p.productNo = #{productNo};
+    </select>
+
+    <update id="updateProduct" parameterType="com.myapp.sscmybatis_02._03_vo.ProductVO">
+        UPDATE product
+        SET
+            name = #{productName},
+            price = #{price},
+            category2No = #{category2No}
+        WHERE
+            productNo = #{productNo};
+    </update>
+
+
+
+</mapper>

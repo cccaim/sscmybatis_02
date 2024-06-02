@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>질문 답변 게시판</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <ul>
+            <ul>
+                <li><a href="/products/1">상품목록</a></li>
+                <li><a href="/questions/1">문의목록</a></li>
+                <li><a href="/users/1">회원목록</a></li>
+                <li><a href="/notices/1">공지목록</a></li>
+            </ul>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header">
+            <h1>메인</h1>
+            <div class="search">
+                <input type="text" placeholder="검색">
+                <select>
+                    <option>상품분류</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // JavaScript 코드를 직접 작성
+    function expandQuestion(element) {
+        // Toggle 'expanded' class to expand/collapse the content
+        element.classList.toggle('expanded');
+
+        // Toggle answer form visibility
+        var answerForm = element.querySelector('.answer-form');
+        if (answerForm) {
+            answerForm.style.display = answerForm.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+
+    function submitAnswer(button) {
+        // Retrieve answer from textarea
+        var textarea = button.parentElement.querySelector('textarea');
+        var answer = textarea.value;
+
+        // Perform further actions with the submitted answer (e.g., send to server)
+        console.log('Submitted answer:', answer);
+    }
+</script>
+</body>
+</html>
