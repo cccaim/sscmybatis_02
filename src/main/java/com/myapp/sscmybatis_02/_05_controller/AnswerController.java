@@ -4,6 +4,7 @@ package com.myapp.sscmybatis_02._05_controller;
 import com.myapp.sscmybatis_02._02_dto.AnswerDTO;
 import com.myapp.sscmybatis_02._04_service.AnswerService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +23,10 @@ public class AnswerController {
     model.addAttribute("answerList", answerList);
     return "answer";
   }
-
   @PostMapping
   @ResponseBody
-  public String saveAnswer(@RequestBody AnswerDTO answerDTO) {
+  public ResponseEntity<?> addAnswer(@RequestBody AnswerDTO answerDTO) {
     answerService.saveAnswer(answerDTO);
-    return "success";
+    return ResponseEntity.ok().body("Answer saved successfully");
   }
 }

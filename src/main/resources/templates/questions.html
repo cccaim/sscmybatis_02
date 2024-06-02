@@ -23,9 +23,6 @@
             <h1>문의목록</h1>
             <div class="search">
                 <input type="text" placeholder="검색">
-                <select>
-                    <option>상품분류</option>
-                </select>
             </div>
         </div>
         <table>
@@ -42,16 +39,16 @@
                     <td>
                         <div th:text="${question.questionNo}"></div>
                     </td>
-                    <td>
-                        <div th:text="${question.productName}"></div>
-                    </td>
                     <td class="question-content" onclick="expandQuestion(this)">
                         <div th:text="${question.content}" class="expandable"></div>
                         <div class="answer-form" style="display: none;">
                             <!-- Answer form goes here -->
-                            <textarea placeholder="답변 내용"></textarea>
-                            <button onclick="submitAnswer(this)">등록</button>
+                        <textarea placeholder="답변 내용"></textarea>
+                        <button onclick="submitAnswer(this)">등록</button>
                         </div>
+                    </td>
+                    <td>
+                        <div th:text="${question.productName}"></div>
                     </td>
                     <td class="answer-toggle">미확인</td>
                 </tr>
@@ -87,13 +84,26 @@
         }
     }
 
-    function submitAnswer(button) {
-        // Retrieve answer from textarea
+    function submitAnswer(button, questionNo) {
         var textarea = button.parentElement.querySelector('textarea');
         var answer = textarea.value;
 
-        // Perform further actions with the submitted answer (e.g., send to server)
-        console.log('Submitted answer:', answer);
+        fetch('/answers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                questionNo: questionNo,
+                content: answer
+            })
+        }).then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // 여기서 서버 응답에 따라 추가 작업을 수행할 수 있습니다.
+            }).catch((error) => {
+            console.error('Error:', error);
+        });
     }
 </script>
 </body>

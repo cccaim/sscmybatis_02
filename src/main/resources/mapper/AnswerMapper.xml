@@ -28,11 +28,10 @@
             user u ON a.userNo = u.userNo
     </select>
 
-    <insert id="insertAnswer" parameterType="com.myapp.sscmybatis_02._03_vo.Answer">
-         INSERT INTO answer (questionNo, userNo, content, uploadDate)
-         VALUES (#{questionNo}, #{userNo}, #{content}, #{uploadDate})
+    <insert id="insertAnswer">
+        INSERT INTO answer (questionNo, content, uploadDate, userNo)
+        VALUES (#{questionNo}, #{content}, NOW(), #{userNo})
     </insert>
-
 
 </mapper>
 

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원목록 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         {
             display: none;
@@ -26,11 +27,9 @@
     <div class="main-content">
         <div class="header">
             <h1>회원목록</h1>
-            <div class="search">
-                <input type="text" placeholder="검색">
-            </div>
+            <div class="search"><input type="text" placeholder="검색"></div>
         </div>
-        <table>
+        <table class="table">
             <thead>
             <tr>
                 <th>No.</th>
@@ -44,31 +43,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user : ${userList}">
-                <td>
-                    <div th:text="${user.userNo}"></div>
-                </td>
-                <td class="notice">
-                    <div th:text="${user.name}"></div>
-                </td>
-                <td>
-                    <div th:text="${user.birth}"></div>
-                </td>
-                <td>
-                    <div th:text="${user.tel}"></div>
-                </td>
-                <td>
-                    <div th:text="${user.gender}"></div>
-                </td>
-                <td>
-                    <div th:text="${user.email}"></div>
-                </td>
-                <td>
-                    <div th:text="${user.id}"></div>
-                </td>
-                <td>
-                    null
-                </td>
+            <tr th:each="user : ${userList}" th:onclick="|showUserDetails([[${user.userNo}]])|">
+                <td><div th:text="${user.userNo}"></div></td>
+                <td class="notice"><div th:text="${user.name}"></div></td>
+                <td><div th:text="${user.birth}"></div></td>
+                <td><div th:text="${user.tel}"></div></td>
+                <td><div th:text="${user.gender == 1 ? '남' : '여'}"></div></td>
+                <td><div th:text="${user.email}"></div></td>
+                <td><div th:text="${user.id}"></div></td>
+                <td>null</td>
             </tr>
 
             </tbody>
@@ -84,6 +67,58 @@
         </div>
     </div>
 </div>
+
+<!-- 모달 -->
+<div class="modal fade" id="userDetailModal" tabindex="-1" role="dialog" aria-labelledby="userDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userDetailModalLabel">User Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>이름:</strong> <span id="detailName"></span></p>
+                <p><strong>생년월일:</strong> <span id="detailBirth"></span></p>
+                <p><strong>전화번호:</strong> <span id="detailTel"></span></p>
+                <p><strong>성별:</strong> <span id="detailGender"></span></p>
+                <p><strong>이메일:</strong> <span id="detailEmail"></span></p>
+                <p><strong>ID:</strong> <span id="detailId"></span></p>
+                <p><strong>등급:</strong> <span id="detailGrade"></span></p>
+                <!-- 추가적인 필드를 여기에 추가 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function showUserDetails(userNo) {
+        // Ajax 요청으로 상세 정보를 가져오는 로직 구현
+        fetch(`/users/details/${userNo}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('detailName').innerText = data.name;
+                document.getElementById('detailBirth').innerText = data.birth;
+                document.getElementById('detailTel').innerText = data.tel;
+                document.getElementById('detailGender').innerText = data.gender === 1 ? '남' : '여';
+                document.getElementById('detailEmail').innerText = data.email;
+                document.getElementById('detailId').innerText = data.id;
+                document.getElementById('detailGrade').innerText = data.grade;
+                // 추가적인 필드 업데이트
+
+                $('#userDetailModal').modal('show');
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
 
 </body>
 </html>
