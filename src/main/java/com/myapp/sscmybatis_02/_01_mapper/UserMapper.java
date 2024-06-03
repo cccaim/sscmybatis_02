@@ -11,4 +11,6 @@ public interface UserMapper {
   List<UserVO> getUserList(int userNo);
   void deleteUser(int userNo);
   UserVO getUserDetails(int userNo);
+  List<UserVO> searchUsers(String keyword);
 }
+

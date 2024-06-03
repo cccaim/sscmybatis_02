@@ -36,4 +36,11 @@ public class UserController {
     userService.deleteUser(userNo);
     return ResponseEntity.ok().build();
   }
+
+  @GetMapping("/search")
+  public String searchUsers(@RequestParam String keyword, Model model) {
+    List<UserDTO> userList = userService.searchUsers(keyword);
+    model.addAttribute("userList", userList);
+    return "users";
+  }
 }

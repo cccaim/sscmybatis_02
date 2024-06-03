@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>질문 답변 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -38,7 +40,7 @@
                 <td>
                     <div th:text="${question.questionNo}"></div>
                 </td>
-                <td class="question-content" data-questionno="${question.questionNo}">
+                <td class="question-content" data-questionno="${question.questionNo}" data-content="${question.content}">
                     <div th:text="${question.content}" class="expandable"></div>
                 </td>
                 <td>
@@ -48,11 +50,6 @@
             </tr>
             </tbody>
         </table>
-        <div>
-            <td colspan="4">
-                <a class="btn" href="/questions/new">새 문의 만들기(작동안함 삭제용)</a>
-            </td>
-        </div>
         <div class="pagination">
             <a href="#">&lt;</a>
             <a href="#">1</a>
@@ -65,51 +62,66 @@
 </div>
 
 <!-- 답변 입력 모달 -->
-<div id="answerModal" style="display:none;">
-    <h2>답변 작성</h2>
-    <textarea id="answerContent" placeholder="답변을 입력하세요"></textarea>
-    <button id="submitAnswer">제출</button>
-    <button id="closeModal">닫기</button>
+<div id="answerModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">답변 작성</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="questionContent"></p>
+                <form id="answerForm">
+                    <div class="form-group">
+                        <textarea id="answerContent" class="form-control" placeholder="답변을 입력하세요"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">제출</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 <script>
     $(document).ready(function() {
-        $('.question-content').click(function() {
-            var questionNo = $(this).data('questionno');
-            $('#answerModal').data('questionno', questionNo).show();
+        // 모달을 열 때 questionNo와 questionContent를 설정
+        $('.question-content').on('click', function() {
+            let questionNo = $(this).data('questionno');
+            let questionContent = $(this).data('content');
+            $('#answerForm').data('questionno', questionNo);
+            $('#questionContent').text(questionContent);
+            $('#answerModal').modal('show');
         });
 
-        $('#submitAnswer').click(function() {
-            var questionNo = $('#answerModal').data('questionno');
-            var content = $('#answerContent').val();
+        $('#answerForm').on('submit', function(event) {
+            event.preventDefault();
+            let answerContent = $('#answerContent').val();
+            let questionNo = $(this).data('questionno'); // 해당 질문 번호 가져오기
 
             $.ajax({
                 url: '/answers',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    questionNo: parseInt(questionNo),
-                    content: content,
-                    userNo: 1
+                    questionNo: questionNo,
+                    content: answerContent
                 }),
                 success: function(response) {
                     alert('답변이 저장되었습니다.');
-                    $('#answerModal').hide();
-                    $('#answerContent').val('');
+                    $('#answerModal').modal('hide');
                 },
-                error: function() {
+                error: function(error) {
                     alert('오류가 발생했습니다.');
                 }
             });
         });
 
-        $('#closeModal').click(function() {
-            $('#answerModal').hide();
-            $('#answerContent').val('');
+        $('#closeModal').on('click', function() {
+            $('#answerModal').modal('hide');
         });
     });
 </script>
-
 </body>
 </html>

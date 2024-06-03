@@ -20,10 +20,15 @@
         </ul>
     </div>
     <div class="main-content">
+
         <div class="header">
             <h1>회원목록</h1>
-            <div class="search"><input type="text" placeholder="검색"></div>
+            <div class="search">
+                <input type="text" id="searchInput" placeholder="검색">
+                <button onclick="searchUsers()">검색</button>
+            </div>
         </div>
+
         <table class="table">
             <thead>
             <tr>
@@ -154,6 +159,12 @@
                 .catch(error => console.error('Error:', error));
         });
     });
+
+    function searchUsers() {
+        const searchKeyword = document.getElementById('searchInput').value;
+        window.location.href = `/users/search?keyword=${encodeURIComponent(searchKeyword)}`;
+    }
+
 </script>
 </body>
 </html>

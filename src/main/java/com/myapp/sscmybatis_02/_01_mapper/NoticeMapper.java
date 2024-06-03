@@ -2,6 +2,7 @@ package com.myapp.sscmybatis_02._01_mapper;
 
 
 import com.myapp.sscmybatis_02._03_vo.NoticeVO;
+import com.myapp.sscmybatis_02._03_vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,4 +14,8 @@ public interface NoticeMapper {
   NoticeVO getNoticeById(int noticeNo);
 
   void insertNotice(NoticeVO notice);
+
+  List<NoticeVO> searchNotices(String keyword);
+
+  void updateNotice(NoticeVO notice);
 }

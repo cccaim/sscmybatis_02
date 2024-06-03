@@ -3,6 +3,7 @@ package com.myapp.sscmybatis_02._05_controller;
 
 import com.myapp.sscmybatis_02._02_dto.NoticeDTO;
 import com.myapp.sscmybatis_02._04_service.NoticeService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,5 +46,18 @@ public class NoticeController {
   public String createNotice(@ModelAttribute NoticeDTO notice) {
     noticeService.createNotice(notice);
     return "redirect:/notices/1";
+  }
+
+  @GetMapping("/search")
+  public String searchNotices(@RequestParam("keyword") String keyword, Model model) {
+    List<NoticeDTO> noticeList = noticeService.searchNotices(keyword);
+    model.addAttribute("noticeList", noticeList);
+    return "notices";
+  }
+
+  @PostMapping("/edit")
+  public String editNotice(@ModelAttribute NoticeDTO notice) {
+    noticeService.updateNotice(notice);
+    return "redirect:/notices/details/" + notice.getNoticeNo();
   }
 }
