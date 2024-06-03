@@ -7,8 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface AnswerMapper {
-    List<AnswerVO> getAnswerList(int AnswerNo);
-
+    List<AnswerVO> getAnswerList(int answerNo);
     void insertAnswer(AnswerVO answerVO);
 }
 

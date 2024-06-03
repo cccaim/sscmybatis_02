@@ -8,4 +8,5 @@ import java.util.List;
 @Mapper
 public interface QuestionMapper {
     List<QuestionVO> getQuestionList(int questionNo);
+    boolean existsByQuestionNo(int questionNo);
 }

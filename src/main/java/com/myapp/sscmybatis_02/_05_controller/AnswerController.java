@@ -12,21 +12,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/answers")
 public class AnswerController {
   private final AnswerService answerService;
 
-  @GetMapping("/{answerNO}")
-  public String getAnswer(@PathVariable int answerNO , Model model) {
-    List<AnswerDTO> answerList = answerService.getAllAnswers(answerNO);
+  @GetMapping("/{answerNo}")
+  public String getAnswer(@PathVariable int answerNo, Model model) {
+    List<AnswerDTO> answerList = answerService.getAllAnswers(answerNo);
     model.addAttribute("answerList", answerList);
     return "answer";
   }
+
   @PostMapping
   @ResponseBody
   public ResponseEntity<?> addAnswer(@RequestBody AnswerDTO answerDTO) {
+    if (!answerService.isValidQuestionNo(answerDTO.getQuestionNo())) {
+      return ResponseEntity.badRequest().body("Invalid question number");
+    }
+
     answerService.saveAnswer(answerDTO);
     return ResponseEntity.ok().body("Answer saved successfully");
   }
 }
+

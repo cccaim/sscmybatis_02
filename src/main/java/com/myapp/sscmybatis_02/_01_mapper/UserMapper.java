@@ -9,4 +9,6 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
   List<UserVO> getUserList(int userNo);
+  void deleteUser(int userNo);
+  UserVO getUserDetails(int userNo);
 }

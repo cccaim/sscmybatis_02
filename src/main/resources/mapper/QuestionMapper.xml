@@ -22,4 +22,10 @@
         LEFT JOIN
             product p ON q.productNo = p.productNo
     </select>
+
+    <select id="existsByQuestionNo" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM question
+        WHERE questionNo = #{questionNo}
+    </select>
 </mapper>

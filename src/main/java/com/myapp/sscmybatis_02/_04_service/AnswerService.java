@@ -1,5 +1,6 @@
 package com.myapp.sscmybatis_02._04_service;
 
+import com.myapp.sscmybatis_02._01_mapper.QuestionMapper;
 import com.myapp.sscmybatis_02._02_dto.AnswerDTO;
 import com.myapp.sscmybatis_02._01_mapper.AnswerMapper;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Service
 public class AnswerService {
   private final AnswerMapper answerMapper;
+  private final QuestionMapper questionMapper;
 
   public List<AnswerDTO> getAllAnswers(int answerNo) {
     List<AnswerVO> voList = answerMapper.getAnswerList(answerNo);
@@ -21,13 +23,11 @@ public class AnswerService {
     List<AnswerDTO> dtoList = new ArrayList<>();
     for (AnswerVO vo : voList) {
       AnswerDTO dto = new AnswerDTO();
-
       dto.setAnswerNo(vo.getAnswerNo());
       dto.setQuestionNo(vo.getQuestionNo());
       dto.setContent(vo.getContent());
       dto.setUploadDate(vo.getUploadDate());
       dto.setUserNo(vo.getUserNo());
-
       dtoList.add(dto);
     }
     return dtoList;
@@ -41,5 +41,9 @@ public class AnswerService {
             answerDTO.getUserNo()
     );
     answerMapper.insertAnswer(answerVO);
+  }
+
+  public boolean isValidQuestionNo(int questionNo) {
+    return questionMapper.existsByQuestionNo(questionNo); // QuestionMapper를 사용하여 확인
   }
 }

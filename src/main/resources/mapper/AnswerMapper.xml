@@ -28,9 +28,13 @@
             user u ON a.userNo = u.userNo
     </select>
 
+<!--    <select id="getAnswerList" resultType="com.myapp.sscmybatis_02._03_vo.AnswerVO">-->
+<!--        SELECT * FROM answer WHERE answerNo = #{answerNo}-->
+<!--    </select>-->
+
     <insert id="insertAnswer">
-        INSERT INTO answer (questionNo, content, uploadDate, userNo)
-        VALUES (#{questionNo}, #{content}, NOW(), #{userNo})
+        INSERT INTO answer (answerNo, questionNo, content, uploadDate, userNo)
+        VALUES (#{answerNo}, #{questionNo}, #{content}, #{uploadDate}, #{userNo})
     </insert>
 
 </mapper>
