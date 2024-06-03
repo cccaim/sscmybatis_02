@@ -13,5 +13,5 @@ public class AnswerDTO {
     private int questionNo;
     private String content;
     private String uploadDate;
-    private String userNo;
+    private int userNo;
 }

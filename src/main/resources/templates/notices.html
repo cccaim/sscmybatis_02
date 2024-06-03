@@ -28,9 +28,6 @@
             <h1>공지목록</h1>
             <div class="search">
                 <input type="text" placeholder="검색">
-                <select>
-                    <option>상품분류</option>
-                </select>
             </div>
         </div>
         <table>
@@ -50,8 +47,7 @@
                 </td>
                 <td class="notice">
                     <div>
-                        <a th:href="@{'/notice/details/' + ${notice.noticeNo}}"
-                           th:text="${notice.title}"></a>
+                        <a th:href="@{'/notices/details/' + ${notice.noticeNo}}" th:text="${notice.title}"></a>
                     </div>
                 </td>
                 <td>
@@ -69,7 +65,7 @@
         </table>
         <div>
             <td colspan="4">
-                <button href="#">새 공지 만들기</button>
+                <a href="/notices/new" class="button">새 공지 만들기</a>
             </td>
         </div>
 

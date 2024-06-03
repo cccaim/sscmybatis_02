@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>질문 답변 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -37,12 +38,8 @@
                 <td>
                     <div th:text="${question.questionNo}"></div>
                 </td>
-                <td class="question-content" onclick="expandQuestion(this)">
+                <td class="question-content" data-questionno="${question.questionNo}">
                     <div th:text="${question.content}" class="expandable"></div>
-                    <div class="answer-form" style="display: none;">
-                        <textarea placeholder="답변 내용"></textarea>
-                        <button onclick="submitAnswer(this, [[${question.questionNo}]])">등록</button>
-                    </div>
                 </td>
                 <td>
                     <div th:text="${question.productName}"></div>
@@ -67,45 +64,52 @@
     </div>
 </div>
 
+<!-- 답변 입력 모달 -->
+<div id="answerModal" style="display:none;">
+    <h2>답변 작성</h2>
+    <textarea id="answerContent" placeholder="답변을 입력하세요"></textarea>
+    <button id="submitAnswer">제출</button>
+    <button id="closeModal">닫기</button>
+</div>
+
+
 <script>
-    // JavaScript 코드를 직접 작성
-    function expandQuestion(element) {
-        // Toggle 'expanded' class to expand/collapse the content
-        element.classList.toggle('expanded');
-
-        // Toggle answer form visibility
-        var answerForm = element.querySelector('.answer-form');
-        if (answerForm) {
-            answerForm.style.display = answerForm.style.display === 'none' ? 'block' : 'none';
-        }
-    }
-
-    function submitAnswer(button, questionNo) {
-        event.preventDefault(); // 기본 폼 제출 동작을 막음
-        var textarea = button.parentElement.querySelector('textarea');
-        var answer = textarea.value;
-
-        fetch('/answers', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                questionNo: questionNo,
-                content: answer
-            })
-        }).then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                // 여기서 서버 응답에 따라 추가 작업을 수행할 수 있습니다.
-                alert('답변이 성공적으로 저장되었습니다.'); // 사용자에게 알림
-                textarea.value = ''; // 입력창 리셋
-                button.parentElement.style.display = 'none'; // 입력 폼 숨기기
-            }).catch((error) => {
-            console.error('Error:', error);
-            alert('답변 저장에 실패했습니다.');
+    $(document).ready(function() {
+        $('.question-content').click(function() {
+            var questionNo = $(this).data('questionno');
+            $('#answerModal').data('questionno', questionNo).show();
         });
-    }
+
+        $('#submitAnswer').click(function() {
+            var questionNo = $('#answerModal').data('questionno');
+            var content = $('#answerContent').val();
+
+            $.ajax({
+                url: '/answers',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    questionNo: parseInt(questionNo),
+                    content: content,
+                    userNo: 1
+                }),
+                success: function(response) {
+                    alert('답변이 저장되었습니다.');
+                    $('#answerModal').hide();
+                    $('#answerContent').val('');
+                },
+                error: function() {
+                    alert('오류가 발생했습니다.');
+                }
+            });
+        });
+
+        $('#closeModal').click(function() {
+            $('#answerModal').hide();
+            $('#answerContent').val('');
+        });
+    });
 </script>
+
 </body>
 </html>

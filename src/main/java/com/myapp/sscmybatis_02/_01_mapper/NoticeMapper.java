@@ -9,4 +9,8 @@ import java.util.List;
 @Mapper
 public interface NoticeMapper {
   List<NoticeVO> getNoticeList(int noticeNo);
+
+  NoticeVO getNoticeById(int noticeNo);
+
+  void insertNotice(NoticeVO notice);
 }
