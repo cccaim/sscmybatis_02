@@ -23,9 +23,47 @@ public class  ProductController {
   public String showProducts(@PathVariable int productNo, Model model) {
     List<ProductDTO> productList = productService.getAllProduct(productNo);
     List<CategoryDTO> category1List = productService.getCategory1List();
+    int currentPage = 1; // 현재 페이지 값을 설정
+    int totalPages = 10; // 전체 페이지 수를 설정
+
     model.addAttribute("category1List", category1List);
     model.addAttribute("productList", productList);
+    model.addAttribute("currentPage", currentPage);
+    model.addAttribute("totalPages", totalPages);
+
     return "products";
+  }
+
+  // 상품 등록 페이지로 이동
+  @GetMapping("/add")
+  public String addProductPage(Model model) {
+    model.addAttribute("product", new ProductDTO());
+    return "addProduct";
+  }
+
+  // 상품 등록 처리
+  @PostMapping("/add")
+  public String addProduct(@RequestParam String productName,
+                           @RequestParam int price,
+                           @RequestParam String category1Name,
+                           @RequestParam String category2Name,
+                           @RequestParam int category2No,
+                           @RequestParam(value = "photo", required = false) MultipartFile photo) {
+    ProductDTO productDTO = new ProductDTO();
+    productDTO.setProductName(productName);
+    productDTO.setPrice(price);
+    productDTO.setCategory1Name(category1Name);
+    productDTO.setCategory2Name(category2Name);
+    productDTO.setCategory2No(category2No);
+
+    if (photo != null && !photo.isEmpty()) {
+      String photoName = photo.getOriginalFilename();
+      productDTO.setPhotoName(photoName);
+      // 파일 저장 로직 추가 필요
+    }
+
+    productService.addProduct(productDTO);
+    return "redirect:/products/1";
   }
 
   // 제품 수정 폼을 보여주는 메소드

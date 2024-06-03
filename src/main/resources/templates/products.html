@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품목록 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -20,15 +21,16 @@
         <div class="header">
             <h1>상품목록</h1>
             <div class="search">
-            <form action="/products/search" method="GET">
-                <input type="text" name="keyword" placeholder="검색어를 입력하세요">
-                <select name="category">
-                    <option th:each="c: ${category1List}"
-                            th:value="${c.getName()}"
-                            th:text="${c.getNameKo()}"></option>
-                </select>
-                <button type="submit">검색</button>
-            </form>
+                <a href="/products/add" class="btn btn-primary" style="display: inline-block; margin-left: 10px;">상품 등록</a>
+                <form action="/products/search" method="GET">
+                    <input type="text" name="keyword" placeholder="검색어를 입력하세요">
+                    <select name="category">
+                        <option th:each="c: ${category1List}"
+                                th:value="${c.getName()}"
+                                th:text="${c.getNameKo()}"></option>
+                    </select>
+                    <button type="submit">검색</button>
+                </form>
             </div>
         </div>
         <table>
@@ -44,12 +46,10 @@
             </thead>
             <tbody>
             <tr th:each="product : ${productList}">
-                <td>
-                    <div th:text="${product.productNo}"></div>
-                </td>
+                <td><div th:text="${product.productNo}"></div></td>
                 <td>
                     <a th:href="@{'/products/update/' + ${product.productNo}}">
-                    <img th:src="@{'/images' + ${product.photoName} +'.jpg'}" width="100">
+                        <img th:src="@{'/images' + ${product.photoName} +'.jpg'}" width="100">
                     </a>
                 </td>
                 <td>
@@ -59,23 +59,20 @@
                         </a>
                     </div>
                 </td>
-                <td>
-                    <div th:text="${product.price}"></div>
-                </td>
-                <td>
-                    <div th:text="${product.category1Name_ko}"></div>
-                </td>
-                <td>
-                    <div th:text="${product.category2Name_ko}"></div>
-                </td>
+                <td><div th:text="${product.price}"></div></td>
+                <td><div th:text="${product.category1Name_ko}"></div></td>
+                <td><div th:text="${product.category2Name_ko}"></div></td>
             </tr>
             </tbody>
         </table>
         <div class="pagination">
-
+            <a th:if="${currentPage > 1}" th:href="@{/products(page=${currentPage - 1}, size=${size})}">&lt;</a>
+            <span th:each="i : ${#numbers.sequence(1, totalPages != null ? totalPages : 1)}">
+                <a th:href="@{/products(page=${i}, size=${size})}" th:text="${i}" th:classappend="${i == currentPage} ? 'active'"></a>
+            </span>
+            <a th:if="${currentPage < totalPages}" th:href="@{/products(page=${currentPage + 1}, size=${size})}">&gt;</a>
         </div>
     </div>
 </div>
-
 </body>
 </html>

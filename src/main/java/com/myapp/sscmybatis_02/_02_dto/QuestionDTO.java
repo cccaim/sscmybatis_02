@@ -19,4 +19,7 @@ public class QuestionDTO {
     private String userName;
     private String productName;
 
+    private boolean hasAnswer; // 답변 상태 설정
+    private String answerContent; // 답변 내용 추가
+
 }

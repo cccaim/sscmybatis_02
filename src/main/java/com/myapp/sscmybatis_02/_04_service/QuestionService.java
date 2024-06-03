@@ -1,5 +1,6 @@
 package com.myapp.sscmybatis_02._04_service;
 
+import com.myapp.sscmybatis_02._01_mapper.AnswerMapper;
 import com.myapp.sscmybatis_02._02_dto.QuestionDTO;
 import com.myapp.sscmybatis_02._01_mapper.QuestionMapper;
 
@@ -14,6 +15,8 @@ import java.util.List;
 @Service
 public class QuestionService {
   private final QuestionMapper questionMapper;
+  private final AnswerMapper answerMapper;
+
   //모든 질문목록을 반환
   public List<QuestionDTO> getAllQuestions(int questionId) {
     List<QuestionVO> voList = questionMapper.getQuestionList(questionId);
@@ -33,6 +36,9 @@ public class QuestionService {
       dto.setProductNo(vo.getProductNo());
       dto.setUserName(vo.getUserName());
       dto.setProductName(vo.getProductName());
+
+      dto.setHasAnswer(answerMapper.countAnswersByQuestionNo(vo.getQuestionNo()) > 0); // 답변 상태 설정
+      dto.setAnswerContent(answerMapper.findLatestAnswerContentByQuestionNo(vo.getQuestionNo())); // 최신 답변 내용 설정
 
       dtoList.add(dto);
     }
