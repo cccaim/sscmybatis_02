@@ -22,4 +22,11 @@
         LEFT JOIN
             product p ON q.productNo = p.productNo
     </select>
+
+    <select id="existsByQuestionNo" resultType="int">
+        SELECT COUNT(*)
+        FROM question
+        WHERE questionNo = #{questionNo}
+    </select>
+
 </mapper>

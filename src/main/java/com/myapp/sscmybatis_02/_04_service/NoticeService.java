@@ -39,4 +39,16 @@ public class NoticeService {
     }
     return dtoList;
   }
+
+  // 단일 공지사항 조회
+  public NoticeDTO getNoticeById(int noticeNo) {
+    NoticeVO vo = noticeMapper.getNoticeById(noticeNo);
+    return new NoticeDTO(vo.getNoticeNo(), vo.getContent(), vo.getStartDate(), vo.getEndDate(), vo.getUploadDate(), vo.getTitle(), vo.getUserNo(), vo.getName());
+  }
+
+  // 새 공지사항 생성 메서드
+  public void createNotice(NoticeDTO notice) {
+    NoticeVO vo = new NoticeVO(notice.getNoticeNo(), notice.getContent(), notice.getStartDate(), notice.getEndDate(), notice.getUploadDate(), notice.getTitle(), notice.getUserNo(), notice.getName());
+    noticeMapper.insertNotice(vo);
+  }
 }

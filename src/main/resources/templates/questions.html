@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>질문 답변 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div class="container">
     <div class="sidebar">
         <ul>
-            <ul>
-                <li><a href="/products/1">상품목록</a></li>
-                <li><a href="/questions/1" class="active">문의목록</a></li>
-                <li><a href="/users/1">회원목록</a></li>
-                <li><a href="/notices/1">공지목록</a></li>
-            </ul>
+            <li><a href="/products/1">상품목록</a></li>
+            <li><a href="/questions/1" class="active">문의목록</a></li>
+            <li><a href="/users/1">회원목록</a></li>
+            <li><a href="/notices/1">공지목록</a></li>
         </ul>
     </div>
     <div class="main-content">
@@ -23,9 +22,6 @@
             <h1>문의목록</h1>
             <div class="search">
                 <input type="text" placeholder="검색">
-                <select>
-                    <option>상품분류</option>
-                </select>
             </div>
         </div>
         <table>
@@ -38,23 +34,18 @@
             </tr>
             </thead>
             <tbody>
-                <tr th:each="question : ${questionList}" class="question-row">
-                    <td>
-                        <div th:text="${question.questionNo}"></div>
-                    </td>
-                    <td class="question-content" onclick="expandQuestion(this)">
-                        <div th:text="${question.content}" class="expandable"></div>
-                        <div class="answer-form" style="display: none;">
-                            <!-- Answer form goes here -->
-                        <textarea placeholder="답변 내용"></textarea>
-                        <button onclick="submitAnswer(this)">등록</button>
-                    </div>
-                    </td>
-                    <td>
-                        <div th:text="${question.productName}"></div>
-                    </td>
-                    <td class="answer-toggle">미확인</td>
-                </tr>
+            <tr th:each="question : ${questionList}" class="question-row">
+                <td>
+                    <div th:text="${question.questionNo}"></div>
+                </td>
+                <td class="question-content" data-questionno="${question.questionNo}">
+                    <div th:text="${question.content}" class="expandable"></div>
+                </td>
+                <td>
+                    <div th:text="${question.productName}"></div>
+                </td>
+                <td class="answer-toggle">미확인</td>
+            </tr>
             </tbody>
         </table>
         <div>
@@ -73,28 +64,52 @@
     </div>
 </div>
 
+<!-- 답변 입력 모달 -->
+<div id="answerModal" style="display:none;">
+    <h2>답변 작성</h2>
+    <textarea id="answerContent" placeholder="답변을 입력하세요"></textarea>
+    <button id="submitAnswer">제출</button>
+    <button id="closeModal">닫기</button>
+</div>
+
 
 <script>
-    // JavaScript 코드를 직접 작성
-    function expandQuestion(element) {
-        // Toggle 'expanded' class to expand/collapse the content
-        element.classList.toggle('expanded');
+    $(document).ready(function() {
+        $('.question-content').click(function() {
+            var questionNo = $(this).data('questionno');
+            $('#answerModal').data('questionno', questionNo).show();
+        });
 
-        // Toggle answer form visibility
-        var answerForm = element.querySelector('.answer-form');
-        if (answerForm) {
-            answerForm.style.display = answerForm.style.display === 'none' ? 'block' : 'none';
-        }
-    }
+        $('#submitAnswer').click(function() {
+            var questionNo = $('#answerModal').data('questionno');
+            var content = $('#answerContent').val();
 
-    function submitAnswer(button) {
-        // Retrieve answer from textarea
-        var textarea = button.parentElement.querySelector('textarea');
-        var answer = textarea.value;
+            $.ajax({
+                url: '/answers',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    questionNo: parseInt(questionNo),
+                    content: content,
+                    userNo: 1
+                }),
+                success: function(response) {
+                    alert('답변이 저장되었습니다.');
+                    $('#answerModal').hide();
+                    $('#answerContent').val('');
+                },
+                error: function() {
+                    alert('오류가 발생했습니다.');
+                }
+            });
+        });
 
-        // Perform further actions with the submitted answer (e.g., send to server)
-        console.log('Submitted answer:', answer);
-    }
+        $('#closeModal').click(function() {
+            $('#answerModal').hide();
+            $('#answerContent').val('');
+        });
+    });
 </script>
+
 </body>
 </html>

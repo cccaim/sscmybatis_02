@@ -4,11 +4,10 @@ package com.myapp.sscmybatis_02._05_controller;
 import com.myapp.sscmybatis_02._02_dto.UserDTO;
 import com.myapp.sscmybatis_02._04_service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +22,18 @@ public class UserController {
     List<UserDTO> userList = userService.getAllUsers(userNo);
     model.addAttribute("userList", userList);
     return "users";
+  }
+
+  @GetMapping("/details/{userNo}")
+  @ResponseBody
+  public UserDTO getUserDetails(@PathVariable int userNo) {
+    return userService.getUserDetails(userNo);
+  }
+
+  @DeleteMapping("/delete/{userNo}")
+  @ResponseBody
+  public ResponseEntity<Void> deleteUser(@PathVariable int userNo) {
+    userService.deleteUser(userNo);
+    return ResponseEntity.ok().build();
   }
 }

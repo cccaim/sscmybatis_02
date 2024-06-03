@@ -45,6 +45,7 @@ public class ProductService {
     }
     return dtoList;
   }
+
   public List<ProductDTO> searchProductsByCategory(String keyword, String category) {
     List<ProductVO> voList = productMapper.searchProductsByCategory(keyword, category);
     List<ProductDTO> dtoList = new ArrayList<>();

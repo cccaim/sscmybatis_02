@@ -7,19 +7,44 @@
     <select id="getUserList" resultType="com.myapp.sscmybatis_02._03_vo.UserVO">
         SELECT
             u.userNo,
-            u.name AS userName,
-            u.birth AS userBirth,
-            u.tel AS userTel,
-            u.gender AS userGender,
-            u.email AS userEmail,
-            u.id AS userId,
-            u.pw AS userPw,
-            u.refundAccount AS userRefundAccount,
-            g.userGradeNo AS userGradeUserGradeNo,
-            g.grade AS userGradeGrade
+            u.name,
+            u.birth,
+            u.tel,
+            u.gender,
+            u.email,
+            u.id,
+            u.pw,
+            u.refundAccount,
+            g.userGradeNo,
+            g.grade
         FROM
             user u
                 LEFT JOIN
             userGrade g ON u.userGradeNo = g.userGradeNo;
     </select>
+
+    <select id="getUserDetails" resultType="com.myapp.sscmybatis_02._03_vo.UserVO">
+        SELECT
+            u.userNo,
+            u.name,
+            u.birth,
+            u.tel,
+            u.gender,
+            u.email,
+            u.id,
+            u.pw,
+            u.refundAccount,
+            g.userGradeNo,
+            g.grade
+        FROM
+            user u
+                LEFT JOIN
+            userGrade g ON u.userGradeNo = g.userGradeNo
+        WHERE
+            u.userNo = #{userNo};
+    </select>
+
+    <delete id="deleteUser">
+        DELETE FROM user WHERE userNo = #{userNo}
+    </delete>
 </mapper>
