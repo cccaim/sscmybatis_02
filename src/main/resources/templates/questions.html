@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>질문 답변 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
 <div class="container">
@@ -20,9 +23,6 @@
     <div class="main-content">
         <div class="header">
             <h1>문의목록</h1>
-            <div class="search">
-                <input type="text" placeholder="검색">
-            </div>
         </div>
         <table>
             <thead>
@@ -34,11 +34,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="question : ${questionList}" class="question-row">
+            <tr th:each="question : ${questionList}" class="question-row"
+                th:data-questionno="${question.questionNo}"
+                th:data-content="${question.content}">
                 <td>
                     <div th:text="${question.questionNo}"></div>
                 </td>
-                <td class="question-content" data-questionno="${question.questionNo}">
+                <td class="question-content">
                     <div th:text="${question.content}" class="expandable"></div>
                 </td>
                 <td>
@@ -48,68 +50,78 @@
             </tr>
             </tbody>
         </table>
-        <div>
-            <td colspan="4">
-                <a class="btn" href="/questions/new">새 문의 만들기(작동안함 삭제용)</a>
-            </td>
-        </div>
-        <div class="pagination">
-            <a href="#">&lt;</a>
-            <a href="#">1</a>
-            <a href="#" class="active">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">&gt;</a>
-        </div>
     </div>
 </div>
 
 <!-- 답변 입력 모달 -->
-<div id="answerModal" style="display:none;">
-    <h2>답변 작성</h2>
-    <textarea id="answerContent" placeholder="답변을 입력하세요"></textarea>
-    <button id="submitAnswer">제출</button>
-    <button id="closeModal">닫기</button>
+<div id="answerModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">답변 작성</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="questionContent"></p>
+                <form id="answerForm">
+                    <div class="form-group">
+                        <textarea id="answerContent" class="form-control" placeholder="답변을 입력하세요"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">제출</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        $('.question-content').click(function() {
-            var questionNo = $(this).data('questionno');
-            $('#answerModal').data('questionno', questionNo).show();
+        let userNo = 1; // 현재 로그인한 사용자의 userNo 값을 설정해야 합니다.
+
+        $('.answer-toggle').on('click', function() {
+            let questionRow = $(this).closest('.question-row');
+            let questionNo = questionRow.data('questionno');
+            let questionContent = questionRow.data('content');
+            $('#answerForm').data('questionno', questionNo);
+            $('#questionContent').text(questionContent);
+            $('#answerModal').modal('show');
         });
 
-        $('#submitAnswer').click(function() {
-            var questionNo = $('#answerModal').data('questionno');
-            var content = $('#answerContent').val();
+        $('#answerForm').on('submit', function(event) {
+            event.preventDefault();
+            let answerContent = $('#answerContent').val();
+            let questionNo = $('#answerForm').data('questionno');
+            let questionRow = $(`.question-row[data-questionno="${questionNo}"]`);
 
             $.ajax({
                 url: '/answers',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    questionNo: parseInt(questionNo),
-                    content: content,
-                    userNo: 1
+                    questionNo: questionNo,
+                    content: answerContent,
+                    userNo: userNo // userNo 값을 함께 전달
                 }),
                 success: function(response) {
                     alert('답변이 저장되었습니다.');
-                    $('#answerModal').hide();
-                    $('#answerContent').val('');
+                    $('#answerModal').modal('hide');
+                    questionRow.find('.answer-toggle').text('확인');
                 },
-                error: function() {
+                error: function(error) {
                     alert('오류가 발생했습니다.');
                 }
             });
         });
 
-        $('#closeModal').click(function() {
-            $('#answerModal').hide();
-            $('#answerContent').val('');
+        $('#closeModal').on('click', function() {
+            $('#answerModal').modal('hide');
         });
     });
 </script>
-
 </body>
 </html>

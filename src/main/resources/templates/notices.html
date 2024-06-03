@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
     <style>
         {
             display: none;
@@ -27,7 +31,10 @@
         <div class="header">
             <h1>공지목록</h1>
             <div class="search">
-                <input type="text" placeholder="검색">
+                <form action="/notices/search" method="get">
+                    <input type="text" name="keyword" placeholder="검색">
+                    <button type="submit">검색</button>
+                </form>
             </div>
         </div>
         <table>
@@ -42,25 +49,12 @@
             </thead>
             <tbody>
             <tr th:each="notice : ${noticeList}">
-                <td>
-                    <div th:text="${notice.noticeNo}"></div>
-                </td>
-                <td class="notice">
-                    <div>
-                        <a th:href="@{'/notices/details/' + ${notice.noticeNo}}" th:text="${notice.title}"></a>
-                    </div>
-                </td>
-                <td>
-                    <div th:text="${notice.startDate}"></div>
-                </td>
-                <td>
-                    <div th:text="${notice.endDate}"></div>
-                </td>
-                <td>
-                    <div th:text="${notice.uploadDate}"></div>
-                </td>
+                <td><div th:text="${notice.noticeNo}"></div></td>
+                <td class="notice"><div><a th:href="@{'/notices/details/' + ${notice.noticeNo}}" th:text="${notice.title}"></a></div></td>
+                <td><div th:text="${notice.startDate}"></div></td>
+                <td><div th:text="${notice.endDate}"></div></td>
+                <td><div th:text="${notice.uploadDate}"></div></td>
             </tr>
-
             </tbody>
         </table>
         <div>
@@ -68,16 +62,6 @@
                 <a href="/notices/new" class="button">새 공지 만들기</a>
             </td>
         </div>
-
-        <div class="pagination">
-            <a href="#">&lt;</a>
-            <a href="#">1</a>
-            <a href="#" class="active">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">&gt;</a>
-        </div>
-
     </div>
 </div>
 

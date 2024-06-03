@@ -28,6 +28,11 @@ public class UserService {
     userMapper.deleteUser(userNo);
   }
 
+  public List<UserDTO> searchUsers(String keyword) {
+    List<UserVO> voList = userMapper.searchUsers(keyword);
+    return convertToDTOList(voList);
+  }
+
   private List<UserDTO> convertToDTOList(List<UserVO> voList) {
     List<UserDTO> dtoList = new ArrayList<>();
     for (UserVO vo : voList) {

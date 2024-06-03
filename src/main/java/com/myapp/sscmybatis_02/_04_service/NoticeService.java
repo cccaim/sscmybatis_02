@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -50,5 +51,25 @@ public class NoticeService {
   public void createNotice(NoticeDTO notice) {
     NoticeVO vo = new NoticeVO(notice.getNoticeNo(), notice.getContent(), notice.getStartDate(), notice.getEndDate(), notice.getUploadDate(), notice.getTitle(), notice.getUserNo(), notice.getName());
     noticeMapper.insertNotice(vo);
+  }
+
+  public List<NoticeDTO> searchNotices(String keyword) {
+    List<NoticeVO> voList = noticeMapper.searchNotices(keyword);
+    List<NoticeDTO> dtoList = new ArrayList<>();
+    for (NoticeVO vo : voList) {
+      NoticeDTO dto = new NoticeDTO(
+              vo.getNoticeNo(), vo.getContent(), vo.getStartDate(), vo.getEndDate(), vo.getUploadDate(), vo.getTitle(), vo.getUserNo(), vo.getName()
+      );
+      dtoList.add(dto);
+    }
+    return dtoList;
+  }
+
+  public void updateNotice(NoticeDTO notice) {
+    notice.setUploadDate(new Date());
+    NoticeVO vo = new NoticeVO(
+            notice.getNoticeNo(), notice.getContent(), notice.getStartDate(), notice.getEndDate(), notice.getUploadDate(), notice.getTitle(), notice.getUserNo(), notice.getName()
+    );
+    noticeMapper.updateNotice(vo);
   }
 }

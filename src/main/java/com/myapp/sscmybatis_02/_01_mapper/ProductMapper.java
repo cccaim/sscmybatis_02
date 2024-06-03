@@ -1,7 +1,5 @@
 package com.myapp.sscmybatis_02._01_mapper;
 
-
-import com.myapp.sscmybatis_02._02_dto.ProductDTO;
 import com.myapp.sscmybatis_02._03_vo.CategoryVO;
 import com.myapp.sscmybatis_02._03_vo.ProductVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +15,8 @@ public interface ProductMapper {
 
 
   ProductVO getProductById(int productNo);
-  void updateProduct(ProductVO productVO);
 
+  void insertProduct(ProductVO productVO);
+
+  void updateProduct(ProductVO productVO);
 }

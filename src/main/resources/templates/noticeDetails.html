@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항 상세</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
 <div class="container">
     <div class="sidebar">
         <ul>
-            <ul>
-                <li><a href="/products/1">상품목록</a></li>
-                <li><a href="/questions/1">문의목록</a></li>
-                <li><a href="/users/1">회원목록</a></li>
-                <li><a href="/notices/1" class="active">공지목록</a></li>
-            </ul>
+            <li><a href="/products/1">상품목록</a></li>
+            <li><a href="/questions/1">문의목록</a></li>
+            <li><a href="/users/1">회원목록</a></li>
+            <li><a href="/notices/1" class="active">공지목록</a></li>
         </ul>
     </div>
     <div class="main-content">
@@ -31,7 +33,42 @@
             <p>등록일: <span th:text="${notice.uploadDate}">등록일자</span></p>
             <p>작성자: <span th:text="${notice.name}">작성자명</span></p>
         </div>
+        <button class="btn btn-secondary" onclick="toggleEditForm()">수정하기</button>
+        <div id="editForm" style="display:none; margin-top: 20px;">
+            <h2>공지 수정</h2>
+            <form action="/notices/edit" method="post">
+                <input type="hidden" name="noticeNo" th:value="${notice.noticeNo}">
+                <div class="form-group">
+                    <label for="title">제목</label>
+                    <input type="text" class="form-control" id="title" name="title" th:value="${notice.title}" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">내용</label>
+                    <textarea class="form-control" id="content" name="content" required th:text="${notice.content}"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">시작일</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate" th:value="${#dates.format(notice.startDate, 'yyyy-MM-dd')}" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">종료일</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate" th:value="${#dates.format(notice.endDate, 'yyyy-MM-dd')}" required>
+                </div>
+                <button type="submit" class="btn btn-primary">수정</button>
+            </form>
+        </div>
     </div>
 </div>
+
+<script>
+    function toggleEditForm() {
+        var form = document.getElementById('editForm');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>

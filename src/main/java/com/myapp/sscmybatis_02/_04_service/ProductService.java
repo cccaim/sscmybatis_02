@@ -19,15 +19,18 @@ public class ProductService {
   //메인화면 모든 리스트 나열
   public List<ProductDTO> getAllProduct(int productNo) {
     List<ProductVO> voList = productMapper.getProductList(productNo);
-//    for (ProductVO vo : voList) {
-//      System.out.println(vo);
-//    }
     List<ProductDTO> dtoList = new ArrayList<>();
     for (ProductVO vo : voList) {
       ProductDTO dto = convertToDTO(vo);
       dtoList.add(dto);
     }
     return dtoList;
+  }
+
+  // 상품 등록 메소드 추가
+  public void addProduct(ProductDTO productDTO) {
+    ProductVO productVO = convertToVO(productDTO);
+    productMapper.insertProduct(productVO);
   }
 
   // ID로 제품 정보 가져오기
@@ -85,8 +88,6 @@ public class ProductService {
     vo.setCategory2NameKo(dto.getCategory2Name_ko());
     vo.setCategory1Name(dto.getCategory1Name());
     vo.setCategory1NameKo(dto.getCategory1Name_ko());
-//    vo.setColorNo(dto.getColorNo());
-//    vo.setColorName(dto.getColorName());
     return vo;
   }
 

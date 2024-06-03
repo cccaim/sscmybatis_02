@@ -17,9 +17,9 @@
             p.name AS productName
         FROM
             question q
-        LEFT JOIN
+                LEFT JOIN
             user u ON q.userNo = u.userNo
-        LEFT JOIN
+                LEFT JOIN
             product p ON q.productNo = p.productNo
     </select>
 

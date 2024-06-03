@@ -106,7 +106,10 @@
         WHERE
             productNo = #{productNo};
     </update>
-
+    
+    <insert id="insertProduct">
+        INSERT ("INSERT INTO product (name, price, category2No) VALUES (#{productName}, #{price}, #{category2No})")
+    </insert>
 
 
 </mapper>
