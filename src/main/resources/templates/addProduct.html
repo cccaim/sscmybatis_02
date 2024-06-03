@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product</title>
+    <title>상품 등록</title>
     <link rel="stylesheet" href="/css/editProduct.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
 </head>
@@ -19,44 +18,38 @@
         <a href="/notices/1">공지목록</a>
     </div>
     <div class="content">
-        <h1>Edit Product</h1>
+        <h1>Add Product</h1>
         <div class="form-container">
             <div class="photo-preview-container">
                 <div class="photo-preview">
-                    <img id="photoPreview" th:src="@{${imageUrl}}" alt="Product Photo">
+                    <img id="photoPreview" src="/images/default.jpg" alt="Product Photo">
                 </div>
                 <div class="form-group">
-                    <label for="photo">Product Photo:</label>
+                        <label for="photo">상품 사진</label>
                     <input type="file" id="photo" name="photo" accept="image/*" onchange="previewPhoto(event)">
                 </div>
             </div>
             <div class="form-group-container">
-                <form action="/products/update" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="productNo" th:value="${product.productNo}">
-
+                <form action="/products/add" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="productName">Product Name:</label>
-                        <input type="text" id="productName" name="productName" th:value="${product.productName}" required>
+                        <label for="productName">상품 이름</label>
+                        <input type="text" id="productName" name="productName" required>
                     </div>
                     <div class="form-group">
-                        <label for="price">Price:</label>
-                        <input type="number" id="price" name="price" th:value="${product.price}" required>
+                        <label for="price">가격</label>
+                        <input type="number" id="price" name="price" required>
                     </div>
                     <div class="form-group">
-                        <label for="category1Name">Category 1 Name:</label>
-                        <input type="text" id="category1Name" name="category1Name" th:value="${product.category1Name}" required>
+                        <label for="category1Name">카테고리 1 이름</label>
+                        <input type="text" id="category1Name" name="category1Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="category2Name">Category 2 Name:</label>
-                        <input type="text" id="category2Name" name="category2Name" th:value="${product.category2Name}" required>
+                        <label for="category2Name">카테고리 2 이름</label>
+                        <input type="text" id="category2Name" name="category2Name" required>
                     </div>
-
-                    <!-- 숨김 필드로 category2No 값 전송 -->
-                    <input type="hidden" name="category2No" th:value="${product.category2No}">
-
                     <div class="form-group">
-                        <button type="submit">Submit</button>
-                        <button type="button" class="cancel" onclick="window.history.back();">Cancel</button>
+                        <button type="submit">등록</button>
+                        <button type="button" class="cancel" onclick="window.history.back();">취소</button>
                     </div>
                 </form>
             </div>

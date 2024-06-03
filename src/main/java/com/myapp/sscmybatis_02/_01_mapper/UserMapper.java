@@ -1,6 +1,5 @@
 package com.myapp.sscmybatis_02._01_mapper;
 
-
 import com.myapp.sscmybatis_02._03_vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 

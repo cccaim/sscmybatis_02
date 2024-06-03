@@ -6,6 +6,9 @@
     <title>회원목록 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
 <div class="container">
@@ -23,10 +26,10 @@
 
         <div class="header">
             <h1>회원목록</h1>
-            <div class="search">
-                <input type="text" id="searchInput" placeholder="검색">
-                <button onclick="searchUsers()">검색</button>
-            </div>
+            <form action="/users/search" method="get">
+                <input type="text" id="searchInput" name="keyword" placeholder="검색">
+                <button type="submit">검색</button>
+            </form>
         </div>
 
         <table class="table">
@@ -59,15 +62,6 @@
             </tr>
             </tbody>
         </table>
-
-        <div class="pagination">
-            <a href="#">&lt;</a>
-            <a href="#">1</a>
-            <a href="#" class="active">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">&gt;</a>
-        </div>
     </div>
 </div>
 
@@ -101,6 +95,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
     // 사용자 상세 정보를 모달에 표시하는 함수
     function showUserDetails(userNo) {
@@ -160,10 +155,10 @@
         });
     });
 
-    function searchUsers() {
-        const searchKeyword = document.getElementById('searchInput').value;
-        window.location.href = `/users/search?keyword=${encodeURIComponent(searchKeyword)}`;
-    }
+    // function searchUsers() {
+    //     const searchKeyword = document.getElementById('searchInput').value;
+    //     window.location.href = `/users/search?keyword=${encodeURIComponent(searchKeyword)}`;
+    // }
 
 </script>
 </body>

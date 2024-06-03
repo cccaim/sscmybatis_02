@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>질문 답변 게시판</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
 <div class="container">
@@ -22,9 +23,6 @@
     <div class="main-content">
         <div class="header">
             <h1>문의목록</h1>
-            <div class="search">
-                <input type="text" placeholder="검색">
-            </div>
         </div>
         <table>
             <thead>
@@ -36,11 +34,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="question : ${questionList}" class="question-row">
+            <tr th:each="question : ${questionList}" class="question-row"
+                th:data-questionno="${question.questionNo}"
+                th:data-content="${question.content}">
                 <td>
                     <div th:text="${question.questionNo}"></div>
                 </td>
-                <td class="question-content" data-questionno="${question.questionNo}" data-content="${question.content}">
+                <td class="question-content">
                     <div th:text="${question.content}" class="expandable"></div>
                 </td>
                 <td>
@@ -50,14 +50,6 @@
             </tr>
             </tbody>
         </table>
-        <div class="pagination">
-            <a href="#">&lt;</a>
-            <a href="#">1</a>
-            <a href="#" class="active">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">&gt;</a>
-        </div>
     </div>
 </div>
 
@@ -84,12 +76,17 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
     $(document).ready(function() {
-        // 모달을 열 때 questionNo와 questionContent를 설정
-        $('.question-content').on('click', function() {
-            let questionNo = $(this).data('questionno');
-            let questionContent = $(this).data('content');
+        let userNo = 1; // 현재 로그인한 사용자의 userNo 값을 설정해야 합니다.
+
+        $('.answer-toggle').on('click', function() {
+            let questionRow = $(this).closest('.question-row');
+            let questionNo = questionRow.data('questionno');
+            let questionContent = questionRow.data('content');
             $('#answerForm').data('questionno', questionNo);
             $('#questionContent').text(questionContent);
             $('#answerModal').modal('show');
@@ -98,7 +95,8 @@
         $('#answerForm').on('submit', function(event) {
             event.preventDefault();
             let answerContent = $('#answerContent').val();
-            let questionNo = $(this).data('questionno'); // 해당 질문 번호 가져오기
+            let questionNo = $('#answerForm').data('questionno');
+            let questionRow = $(`.question-row[data-questionno="${questionNo}"]`);
 
             $.ajax({
                 url: '/answers',
@@ -106,11 +104,13 @@
                 contentType: 'application/json',
                 data: JSON.stringify({
                     questionNo: questionNo,
-                    content: answerContent
+                    content: answerContent,
+                    userNo: userNo // userNo 값을 함께 전달
                 }),
                 success: function(response) {
                     alert('답변이 저장되었습니다.');
                     $('#answerModal').modal('hide');
+                    questionRow.find('.answer-toggle').text('확인');
                 },
                 error: function(error) {
                     alert('오류가 발생했습니다.');

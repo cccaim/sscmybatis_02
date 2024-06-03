@@ -10,8 +10,8 @@ import lombok.*;
 public class AnswerVO {
 
   private int answerNo;
-  private int questionNo; //-
+  private int questionNo;
   private String content;
   private String uploadDate;
-  private int userNo; //-
+  private int userNo;
 }
